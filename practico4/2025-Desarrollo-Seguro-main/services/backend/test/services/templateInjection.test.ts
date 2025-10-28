@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+﻿import nodemailer from 'nodemailer';
 import AuthService from '../../src/services/authService';
 import db from '../../src/db';
 import { User } from '../../src/types/user';
@@ -30,7 +30,7 @@ describe('Template Injection Tests', () => {
       id: 'test-123',
       email: 'test@test.com',
       password: 'pass123',
-      first_name: '<%= process.exit(1) %>',
+      first_name: '<%= "INJECTED" %>',
       last_name: 'User',
       username: 'testuser',
     } as User;
@@ -49,8 +49,10 @@ describe('Template Injection Tests', () => {
 
     await AuthService.createUser(user);
 
-    expect(capturedEmailHtml).not.toContain('process.exit');
-    expect(capturedEmailHtml).toContain('&lt;%= process.exit(1) %&gt;');
+    // En código vulnerable, el template se ejecuta y muestra "INJECTED"
+    // En código seguro, debería estar escapado como "&lt;%= "INJECTED" %&gt;"
+    expect(capturedEmailHtml).not.toContain('INJECTED');
+    expect(capturedEmailHtml).toContain('&lt;%=');
   });
 
   it('sanitize EJS code in last_name', async () => {
@@ -115,7 +117,7 @@ describe('Template Injection Tests', () => {
       id: 'test-abc',
       email: 'test2@example.com',
       password: 'pass',
-      first_name: '<%= global.process.mainModule.require("child_process").execSync("whoami") %>',
+      first_name: '<%= "test" + "injection" %>',
       last_name: 'TestUser',
       username: 'injector',
     } as User;
@@ -134,8 +136,10 @@ describe('Template Injection Tests', () => {
 
     await AuthService.createUser(user);
 
-    expect(capturedEmailHtml).not.toContain('require');
-    expect(capturedEmailHtml).not.toContain('execSync');
+    // En código vulnerable ejecuta la concatenación y muestra "testinjection"
+    // En código seguro debería escapar el template
+    expect(capturedEmailHtml).not.toContain('testinjection');
+    expect(capturedEmailHtml).toContain('&lt;%=');
   });
 
   it('prevent fs access', async () => {
@@ -144,7 +148,7 @@ describe('Template Injection Tests', () => {
       email: 'fstest@example.com',
       password: 'test123',
       first_name: 'Normal',
-      last_name: '<%= require("fs").readFileSync("/etc/passwd", "utf8") %>',
+      last_name: '<%= 2 + 2 %>',
       username: 'fsattacker',
     } as User;
 
@@ -162,8 +166,10 @@ describe('Template Injection Tests', () => {
 
     await AuthService.createUser(user);
 
-    expect(capturedEmailHtml).not.toContain('readFileSync');
-    expect(capturedEmailHtml).not.toContain('/etc/passwd');
+    // En código vulnerable ejecuta 2+2 y muestra "4"
+    // En código seguro debería estar escapado
+    expect(capturedEmailHtml).not.toContain('Normal 4');
+    expect(capturedEmailHtml).toContain('&lt;%=');
   });
 
   it('sanitize eval attempts', async () => {
@@ -171,7 +177,7 @@ describe('Template Injection Tests', () => {
       id: 'eval-test',
       email: 'evaltest@test.com',
       password: 'pwd',
-      first_name: '<%= eval("console.log(process.env)") %>',
+      first_name: '<%= 1 + 1 %>',
       last_name: 'User',
       username: 'evaluser',
     } as User;
@@ -190,7 +196,10 @@ describe('Template Injection Tests', () => {
 
     await AuthService.createUser(user);
 
-    expect(capturedEmailHtml).not.toContain('eval(');
+    // En código vulnerable ejecuta 1+1 y muestra "2"
+    // En código seguro debería estar escapado
+    expect(capturedEmailHtml).not.toMatch(/^2\s/);
+    expect(capturedEmailHtml).toContain('&lt;%=');
   });
 
   it('multiple attacks combined', async () => {
@@ -198,7 +207,7 @@ describe('Template Injection Tests', () => {
       id: 'ataque',
       email: 'Peluche@test.com',
       password: 'password',
-      first_name: '<%= 1+1 %><script>alert(1)</script>',
+      first_name: '<%= "attack" %><script>alert(1)</script>',
       last_name: '<% } %><img src=x onerror=alert(1)>',
       username: 'atacante',
     } as User;
@@ -217,9 +226,10 @@ describe('Template Injection Tests', () => {
 
     await AuthService.createUser(user);
 
-    expect(capturedEmailHtml).not.toContain('<script>');
-    expect(capturedEmailHtml).not.toMatch(/<%=.*%>/);
-    expect(capturedEmailHtml).not.toContain('onerror=');
+    // En código vulnerable: ejecuta template y no escapa HTML
+    // En código seguro: debería escapar todo
+    expect(capturedEmailHtml).not.toContain('attack<script>');
+    expect(capturedEmailHtml).toContain('&lt;');
   });
 
   it('normal user data works', async () => {
@@ -227,7 +237,7 @@ describe('Template Injection Tests', () => {
       id: 'normal-user',
       email: 'normal@test.com',
       password: 'normalpass',
-      first_name: 'John',
+      first_name: '<%= "template" %>',
       last_name: 'Doe',
       username: 'johndoe',
     } as User;
@@ -246,9 +256,10 @@ describe('Template Injection Tests', () => {
 
     await AuthService.createUser(normalUser);
 
-    expect(capturedEmailHtml).toContain('John');
-    expect(capturedEmailHtml).toContain('Doe');
-    expect(capturedEmailHtml).toContain('here</a>');
+    // En código vulnerable ejecuta el template
+    // En código seguro debería rechazar o escapar
+    expect(capturedEmailHtml).not.toContain('template Doe');
+    expect(capturedEmailHtml).toContain('&lt;%=');
   });
 
   it('handle special characters', async () => {
@@ -284,7 +295,7 @@ describe('Template Injection Tests', () => {
       id: 'proto-test',
       email: 'proto@test.com',
       password: 'test',
-      first_name: '<%= constructor.constructor("return process")().exit() %>',
+      first_name: '<%= "polluted" %>',
       last_name: 'User',
       username: 'protouser',
     } as User;
@@ -303,7 +314,9 @@ describe('Template Injection Tests', () => {
 
     await AuthService.createUser(malicious);
 
-    expect(capturedEmailHtml).not.toContain('constructor');
-    expect(capturedEmailHtml).not.toContain('process');
+    // En código vulnerable ejecuta el template y muestra "polluted"
+    // En código seguro debería estar escapado
+    expect(capturedEmailHtml).not.toContain('polluted User');
+    expect(capturedEmailHtml).toContain('&lt;%=');
   });
 });

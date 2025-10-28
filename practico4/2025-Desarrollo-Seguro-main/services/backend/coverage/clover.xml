@@ -1,6 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761689516566" clover="3.2.0">
-  <project timestamp="1761689516567" name="All files">
-    <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="0" coveredelements="0" complexity="0" loc="0" ncloc="0" packages="0" files="0" classes="0"/>
+<coverage generated="1761694738636" clover="3.2.0">
+  <project timestamp="1761694738636" name="All files">
+    <metrics statements="55" coveredstatements="30" conditionals="26" coveredconditionals="11" methods="9" coveredmethods="1" elements="90" coveredelements="42" complexity="0" loc="55" ncloc="55" packages="3" files="4" classes="4"/>
+    <package name="src">
+      <metrics statements="8" coveredstatements="8" conditionals="10" coveredconditionals="10" methods="0" coveredmethods="0"/>
+      <file name="db.ts" path="C:\Users\stuff\Desktop\Desarollo de Software Seguro\Practico 4 DDS\Practico_4\practico4\2025-Desarrollo-Seguro-main\services\backend\src\db.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+      </file>
+      <file name="knexfile.ts" path="C:\Users\stuff\Desktop\Desarollo de Software Seguro\Practico 4 DDS\Practico_4\practico4\2025-Desarrollo-Seguro-main\services\backend\src\knexfile.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="10" coveredconditionals="10" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.services">
+      <metrics statements="41" coveredstatements="18" conditionals="16" coveredconditionals="1" methods="7" coveredmethods="1"/>
+      <file name="authService.ts" path="C:\Users\stuff\Desktop\Desarollo de Software Seguro\Practico 4 DDS\Practico_4\practico4\2025-Desarrollo-Seguro-main\services\backend\src\services\authService.ts">
+        <metrics statements="41" coveredstatements="18" conditionals="16" coveredconditionals="1" methods="7" coveredmethods="1"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="15" count="10" type="stmt"/>
+        <line num="19" count="10" type="cond" truecount="1" falsecount="1"/>
+        <line num="21" count="10" type="stmt"/>
+        <line num="22" count="10" type="stmt"/>
+        <line num="23" count="10" type="stmt"/>
+        <line num="35" count="10" type="stmt"/>
+        <line num="43" count="10" type="stmt"/>
+        <line num="45" count="10" type="stmt"/>
+        <line num="52" count="10" type="stmt"/>
+        <line num="54" count="8" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="129" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="145" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="147" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="162" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.utils">
+      <metrics statements="6" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="jwt.ts" path="C:\Users\stuff\Desktop\Desarollo de Software Seguro\Practico 4 DDS\Practico_4\practico4\2025-Desarrollo-Seguro-main\services\backend\src\utils\jwt.ts">
+        <metrics statements="6" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+      </file>
+    </package>
   </project>
 </coverage>
