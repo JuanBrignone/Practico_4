@@ -1,0 +1,57 @@
+services:
+  backend:
+    build:
+      context: ./services/backend
+      dockerfile: DockerFile
+    container_name: desarrollo-seguro
+    ports:
+      - "5000:3000"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=user
+      - DB_PASS=password
+      - DB_NAME=jwt_api
+      - DB_PORT=5432
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+      - SMTP_USER=seed
+      - SMTP_PASS=seed
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/auth/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: sh -c "npx knex --knexfile src/knexfile.ts migrate:latest && cd dist/src/ && node index.js"
+    
+  postgres:
+    image: postgres:latest
+    container_name: postgres-desarrollo-seguro
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: jwt_api
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    restart: unless-stopped
+    container_name: mailhog-desarrollo-seguro
+
+volumes:
+  postgres_data:

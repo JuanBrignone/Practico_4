@@ -7,10 +7,10 @@ RUN  mkdir /invoices/
 COPY resources/ /invoices/
 
 COPY package*.json .
-RUN npm ci
+RUN npm ci --include=dev
 
 COPY . .
-RUN npx tsc --build
+RUN ./node_modules/.bin/tsc --build
 
 EXPOSE 3000
 
