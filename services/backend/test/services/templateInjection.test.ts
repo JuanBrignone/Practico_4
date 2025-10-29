@@ -27,11 +27,11 @@ describe('Template Injection Tests', () => {
 
   it('prevent EJS injection first_name', async () => {
     const user = {
-      id: 'test-123',
-      email: 'test@test.com',
+      id: 'sapo-123',
+      email: 'sapo@test.com',
       password: 'pass123',
       first_name: '<%= process.exit(1) %>',
-      last_name: 'User',
+      last_name: 'Usuario',
       username: 'testuser',
     } as User;
 
@@ -78,12 +78,12 @@ describe('Template Injection Tests', () => {
 
   it('escape script tags', async () => {
     const user = {
-      id: 'test-789',
-      email: 'xss@example.com',
+      id: 'test1899',
+      email: 'xd@example.com',
       password: 'password',
       first_name: '<script>alert("XSS")</script>',
       last_name: 'Normal',
-      username: 'xssuser',
+      username: 'xduser',
     } as User;
 
     const selectChain = {
@@ -105,12 +105,12 @@ describe('Template Injection Tests', () => {
 
   it('prevent require injection', async () => {
     const user = {
-      id: 'req-user',
-      email: 'req@test.com',
-      password: 'reqpass',
+      id: 'requerido-user',
+      email: 'requerido@test.com',
+      password: 'requerido1899',
       first_name: '<% const fs = require("fs"); %>',
-      last_name: 'Test',
-      username: 'requser',
+      last_name: 'Tester',
+      username: 'requerido',
     } as User;
 
     const selectChain = {
@@ -155,12 +155,12 @@ describe('Template Injection Tests', () => {
 
   it('sanitize eval attempts', async () => {
     const user = {
-      id: 'eval-test',
-      email: 'eval@example.org',
-      password: 'evalpass',
+      id: '100pies-test',
+      email: '100pies@example.org',
+      password: 'cienpies',
       first_name: '<% eval("malicious code") %>',
-      last_name: 'Smith',
-      username: 'evaluser',
+      last_name: 'PepeSape',
+      username: 'pepeuser',
     } as User;
 
     const selectChain = {
@@ -261,12 +261,12 @@ describe('Template Injection Tests', () => {
 
   it('prevent prototype pollution', async () => {
     const user = {
-      id: 'proto-test',
-      email: 'proto@test.com',
-      password: 'protopass',
+      id: 'abitab-test',
+      email: 'abiitab@test.com',
+      password: 'abitab',
       first_name: '<% constructor.prototype.polluted = "hacked" %>',
-      last_name: 'User',
-      username: 'protouser',
+      last_name: 'abitab',
+      username: 'abitabuser',
     } as User;
 
     const selectChain = {
